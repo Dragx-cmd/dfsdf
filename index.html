@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Отчёт: как часто мисс Лада гладит Бимбу Бомбочку</title>
+<style>
+:root{--bg:#fff1f5;--surface:#ffffff;--ink:#3a1626;--mute:#8a5a6e;--acc:#ec407a;--acc2:#ffb3cd;--line:#f4cddb;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1f1017;--surface:#2b1822;--ink:#ffe8f0;--mute:#c79ab0;--acc:#ff6fa3;--acc2:#7a2f4d;--line:#4a2a39}}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Trebuchet MS","Segoe UI",Arial,sans-serif;line-height:1.45}
+.wrap{max-width:860px;margin:0 auto;padding:22px 16px 48px}
+.tag{color:var(--mute);font-size:14px;margin:0}
+h1{font-size:clamp(26px,6vw,40px);line-height:1.12;margin:6px 0 6px}
+.sub{color:var(--mute);margin:0 0 20px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:6px}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+.kpi .n{font-size:30px;font-weight:900;color:var(--acc)}
+.kpi .l{color:var(--mute);font-size:14px}
+h2{font-size:19px;margin:30px 0 4px}
+.cap{color:var(--mute);font-size:14px;margin:0 0 10px}
+.box{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 12px;overflow-x:auto}
+svg{display:block;width:100%;height:auto;min-width:420px}
+svg text{fill:var(--mute);font-size:11px;font-family:inherit}
+.grid line{stroke:var(--line)}
+.row{display:grid;grid-template-columns:minmax(120px,200px) 1fr 48px;gap:10px;align-items:center;margin:9px 0;font-size:14px}
+.track{background:var(--line);height:14px;border-radius:7px;overflow:hidden}
+.fill{height:100%;background:var(--acc);border-radius:7px}
+.note{margin-top:30px;color:var(--mute);font-size:13px;text-align:center}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="tag">Внутренний отчёт · данные условные</p>
+  <h1>Как часто мисс Лада гладит Бимбу Бомбочку</h1>
+  <p class="sub">Наблюдение за 7 дней, круглосуточно. Погрешность: Бимба иногда сама подставляет голову.</p>
+
+  <div class="kpis">
+    <div class="kpi"><div class="n">100+</div><div class="l">поглаживаний в день в среднем</div></div>
+    <div class="kpi"><div class="n">14 ч</div><div class="l">в сутки Бимба в зоне доступа</div></div>
+    <div class="kpi"><div class="n">0</div><div class="l">дней без поглаживаний</div></div>
+    <div class="kpi"><div class="n">100%</div><div class="l">Бимб довольны</div></div>
+  </div>
+
+  <h2>Поглаживания по часам суток</h2>
+  <p class="cap">Пик в 19:00, когда Лада приходит домой и Бимба встречает у двери</p>
+  <div class="box"><svg id="line" viewBox="0 0 720 280" role="img" aria-label="График поглаживаний по часам"></svg></div>
+
+  <h2>Поглаживания по дням недели</h2>
+  <p class="cap">В выходные цифры растут: работа не мешает</p>
+  <div class="box"><svg id="bars" viewBox="0 0 720 260" role="img" aria-label="Поглаживания по дням недели"></svg></div>
+
+  <h2>Куда именно гладят</h2>
+  <div class="box" id="zones"></div>
+
+  <p class="note">Страница шуточная. Все цифры придуманы, Бимба Бомбочка официально самая лучшая.</p>
+</div>
+<script>
+var NS="http://www.w3.org/2000/svg";
+function mk(p,t,a,txt){var e=document.createElementNS(NS,t);for(var k in a)e.setAttribute(k,a[k]);if(txt!==undefined)e.textContent=txt;p.appendChild(e);return e}
+var cs=getComputedStyle(document.documentElement);
+function col(v){return cs.getPropertyValue(v).trim()}
+
+/* линия по часам */
+var h=[3,2,1,1,1,2,6,9,5,3,4,4,6,5,4,5,8,12,18,16,11,9,6,4];
+var s=document.getElementById("line"),L=40,R=700,T=20,B=240,mx=20;
+var g=mk(s,"g",{class:"grid"});
+for(var y=0;y<=20;y+=5){var yy=B-(y/mx)*(B-T);mk(g,"line",{x1:L,x2:R,y1:yy,y2:yy});mk(s,"text",{x:L-8,y:yy+4,"text-anchor":"end"},y)}
+var pts=h.map(function(v,i){return [L+i*(R-L)/23,B-(v/mx)*(B-T)]});
+var d="M"+pts.map(function(p){return p[0]+","+p[1]}).join(" L");
+mk(s,"path",{d:d+" L"+R+","+B+" L"+L+","+B+" Z",fill:col("--acc2"),opacity:".55"});
+mk(s,"path",{d:d,fill:"none",stroke:col("--acc"),"stroke-width":3,"stroke-linejoin":"round"});
+pts.forEach(function(p,i){if(i%3==0)mk(s,"text",{x:p[0],y:B+18,"text-anchor":"middle"},(i<10?"0":"")+i+":00")});
+mk(s,"circle",{cx:pts[18][0],cy:pts[18][1],r:5,fill:col("--acc")});
+mk(s,"text",{x:pts[18][0]-8,y:pts[18][1]-10,"text-anchor":"end",style:"fill:"+col("--ink")+";font-weight:700"},"пик: Лада пришла домой");
+
+/* столбцы по дням */
+var days=["Пн","Вт","Ср","Чт","Пт","Сб","Вс"],v=[96,98,95,101,110,142,150];
+var s2=document.getElementById("bars"),bw=60,gap=(660-7*bw)/6,mx2=160,B2=220;
+v.forEach(function(n,i){var x=40+i*(bw+gap),ht=n/mx2*(B2-20);
+mk(s2,"rect",{x:x,y:B2-ht,width:bw,height:ht,rx:8,fill:i>4?col("--acc"):col("--acc2")});
+mk(s2,"text",{x:x+bw/2,y:B2-ht-6,"text-anchor":"middle",style:"fill:"+col("--ink")+";font-weight:700"},n);
+mk(s2,"text",{x:x+bw/2,y:B2+18,"text-anchor":"middle"},days[i])});
+
+/* зоны */
+var z=[["Макушка",92],["За ушком",88],["Пузико",81],["Спинка",64],["Подбородок",57]];
+var zb=document.getElementById("zones");
+z.forEach(function(a){var r=document.createElement("div");r.className="row";r.innerHTML='<span>'+a[0]+'</span><div class="track"><div class="fill" style="width:'+a[1]+'%"></div></div><b>'+a[1]+'%</b>';zb.appendChild(r)});
+</script>
+</body>
+</html>
